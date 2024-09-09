@@ -30,7 +30,7 @@ while True:
     dt = clock.tick() / 1000
 
     # Update.
-    all_sprites.update()
+    all_sprites.update(dt)
 
     # Rysowanie.
     display_surface.fill('black')
