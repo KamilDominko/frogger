@@ -4,14 +4,23 @@ import pygame as pg
 class Player(pg.sprite.Sprite):
     def __init__(self, pos, groups):
         super().__init__(groups)
-        self.image = pg.Surface((50, 50))
-        self.image.fill("red")
+        self.import_assets()
+        self.image = self.animation[0]
         self.rect = self.image.get_rect(center=pos)
 
         # Float based movement
         self.pos = pg.math.Vector2(self.rect.center)
         self.direction = pg.math.Vector2()
         self.speed = 200
+
+    def import_assets(self):
+        path = "../graphics/player/right/"
+        self.animation = [pg.image.load(f'{path}{frame}.png').convert_alpha() for frame in range(4)]
+
+        # for frame in range(4):
+        #     surf = pg.image.load(f'{path}{frame}.png').convert_alpha()
+        #     self.animation.append(surf)
+        print(self.animation)
 
     def move(self, dt):
         # Znormalizuj wektor, jeżeli jego długość nie równa zero.
