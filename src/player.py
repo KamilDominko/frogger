@@ -5,7 +5,8 @@ class Player(pg.sprite.Sprite):
     def __init__(self, pos, groups):
         super().__init__(groups)
         self.import_assets()
-        self.image = self.animation[0]
+        self.frame_index = 0
+        self.image = self.animation[self.frame_index]
         self.rect = self.image.get_rect(center=pos)
 
         # Float based movement
@@ -16,7 +17,6 @@ class Player(pg.sprite.Sprite):
     def import_assets(self):
         path = "../graphics/player/right/"
         self.animation = [pg.image.load(f'{path}{frame}.png').convert_alpha() for frame in range(4)]
-
         # for frame in range(4):
         #     surf = pg.image.load(f'{path}{frame}.png').convert_alpha()
         #     self.animation.append(surf)
@@ -45,6 +45,13 @@ class Player(pg.sprite.Sprite):
         else:
             self.direction.y = 0
 
+    def animate(self, dt):
+        self.frame_index += 10 * dt
+        if self.frame_index >= len(self.animation):
+            self.frame_index = 0
+        self.image = self.animation[int(self.frame_index)]
+
     def update(self, dt):
         self.input()
         self.move(dt)
+        self.animate(dt)
