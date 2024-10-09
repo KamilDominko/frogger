@@ -1,5 +1,6 @@
 import sys
 import pygame as pg
+from random import choice, randint
 from settings import *
 from player import Player
 from car import Car
@@ -16,10 +17,16 @@ clock = pg.time.Clock()
 all_sprites = AllSprites()
 
 # Sprite'y.
-car1 = Car((1000, 200), all_sprites)
-car2 = Car((100, 200), all_sprites)
-car3 = Car((600, 200), all_sprites)
+# car1 = Car((1000, 200), all_sprites)
+# car2 = Car((100, 200), all_sprites)
+# car3 = Car((600, 200), all_sprites)
 player = Player((600, 400), all_sprites)
+
+# Timery.
+car_timer = pg.event.custom_type()
+pg.time.set_timer(car_timer, 50)
+
+pos_list = list()
 
 # Pętla główna.
 while True:
@@ -28,9 +35,14 @@ while True:
         if event.type == pg.QUIT:
             pg.quit()
             sys.exit()
-        # Klawiatura.
-        # if event.type == pg.KEYDOWN:
-        #     print("key pressed")
+        if event.type == car_timer:
+            random_pos = choice(CAR_START_POSITIONS)
+            if random_pos not in pos_list:
+                pos_list.append(random_pos)
+                pos = (random_pos[0], random_pos[1] + randint(-10, 10))
+                Car(pos, all_sprites)
+            if len(pos_list) > 5:
+                del pos_list[0]
 
     # Delta Time.
     dt = clock.tick() / 1000
